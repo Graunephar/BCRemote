@@ -1,6 +1,6 @@
 /secret/*
 
-
+.env
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/phpstorm,phpstorm+all,linux,windows,macos,firebase

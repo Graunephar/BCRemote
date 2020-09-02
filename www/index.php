@@ -7,7 +7,7 @@ use Slim\Factory\AppFactory;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
-
+require('database.php');
 require __DIR__ . '/../vendor/autoload.php';
 require 'vendor/autoload.php';
 
@@ -18,11 +18,12 @@ define('WP_CONTENT_URL' , 'http://bcappdata.graunephar.lol');
 
 $app = AppFactory::create();
 
-$app->get('/', function (Request $request, Response $response, $args) use ($app) {
-
-    print_r("run in 2\n");
+$app->get('/', function (Request $request, Response $response, $args)  {
 
 
+    //$connector = new DatabaseConnector();
+
+    //$connector->updateValue('web/fest', 'Test');
 
 
     $client = new Client([
@@ -32,11 +33,10 @@ $app->get('/', function (Request $request, Response $response, $args) use ($app)
         'timeout'  => 2.0,
     ]);
 
-    $app->foo = "hej";
-
     $promise = $client->requestAsync('GET', '/wp-json/wp/v2/modules');
 
-    $promise->then(function ($response) use ($app) {
+    $promise->then(function ($response) {
+
 
 
     });
