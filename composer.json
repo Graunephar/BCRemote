@@ -1,0 +1,11 @@
+{
+    "require": {
+        "slim/slim": "4.*",
+        "slim/psr7": "^1.2",
+      "ext-curl": "*",
+      "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.0",
+        "monolog/monolog": "^2.1",
+        "kreait/firebase-php": "^5.8"
+    }
+}
