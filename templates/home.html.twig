@@ -13,6 +13,7 @@
 {% endblock %}
 {% block content %}
 
+    <div class="alert_placeholder"></div>
     <h1>Content</h1>
     <form id="idform" action="/submitids" method="POST">
         <ul>
@@ -42,7 +43,7 @@
                     data:$('#idform').serialize(),
                     success:function(){
 
-                        addAlert('body', "App Opdateret");
+                        addAlert('.alert_placeholder', "App Opdateret");
 
                     }
                 });
@@ -65,8 +66,14 @@
         function addAlert(css_selector, message) {
 
             let html = '<div class="alert alert-success" role="alert">' + message + '</div>';
-
             $(css_selector).prepend(html);
+            alertTimeout(5000, css_selector);
+        }
+
+        function alertTimeout(wait, css_selector){
+            setTimeout(function(){
+                $(css_selector).children('.alert:first-child').remove();
+            }, wait);
         }
 
     </script>
