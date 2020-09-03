@@ -13,14 +13,18 @@
 {% endblock %}
 {% block content %}
     <h1>Content</h1>
-    <ul>
-        {% for item in json %}
-            <li><input type="checkbox" id="{{ item.id }}" name="vehicle3" value="Vist"> {{ item.title.rendered|e }}
-            </li>
-        {% endfor %}
-    </ul>
+    <form id="idform" action="/submitids" method="POST">
+        <ul>
+            {% for item in json %}
+                <li><input type="checkbox" id="{{ item.id }}" name="{{ item.id }}" value="true"> {{ item.title.rendered|e }}
+                </li>
+            {% endfor %}
+        </ul>
 
-    <button class="sendData" type="button">Click Me!</button>
+    </form>
+
+
+    <button class="sendData" type="button">Opdater App</button>
     <button class="updateList" type="button">Opdater Liste</button>
 
     <script>
@@ -30,7 +34,8 @@
         $(document).ready(function () {
 
             $('.sendData').on('click', function () {
-                console.log('hej');
+                console.log('Sending Data');
+                $('#idform').submit();
             });
 
             $('.updateList').on('click', function () {

@@ -104,6 +104,24 @@ $app->get('/test', function (Request $request, Response $response, $args) {
 
 });
 
+$app->post('/submitids', function (Request $request, Response $response, $args) {
+    $connector = new DatabaseConnector();
+
+
+    // Get all POST parameters
+    $params = (array)$request->getParsedBody();
+
+    // Get a single POST parameter
+    $foo = $params['foo'];
+    $connector->updateValue('app/ids', $params);
+
+
+    $result = array("success"=>true);
+    $status = json_encode($result );
+    $response->getBody()->write($status);
+    return $response;
+});
+
 
 //$response->getBody()->write("hej");
 //return $response;
