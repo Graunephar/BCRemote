@@ -1,10 +1,13 @@
 <?php
 
 
+use Google\Cloud\Core\Testing\Snippet\Container;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
+use Slim\Views\Twig;
+use Slim\Views\TwigMiddleware;
 
 
 require('database.php');
@@ -16,6 +19,12 @@ $dotenv->load();
 $app = AppFactory::create();
 
 $app->addRoutingMiddleware();
+
+// Create Twig
+$twig = Twig::create('templates', ['cache' => 'cache']);
+
+// Add Twig-View Middleware
+$app->add(TwigMiddleware::create($app, $twig));
 
 /**
  * Add Error Handling Middleware
@@ -32,7 +41,7 @@ $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
 
 $app->get('/', function (Request $request, Response $response, $args)  {
-
+    $view = Twig::fromRequest($request);
 
     $client = new \GuzzleHttp\Client([
         "base_uri" => $_ENV['WORDPRESS'],
@@ -52,7 +61,34 @@ $app->get('/', function (Request $request, Response $response, $args)  {
         $connector->updateValue('wordpress/modules', $json);
 
 
-    $response->getBody()->write("hej");
+    return $view->render($response, 'home.html', [
+        'name' => $args['name']
+    ]);
+
+});
+
+
+//$response->getBody()->write("hej");
+//return $response;
+
+// Define named route
+$app->get('/hello/{name}', function ($request, $response, $args) {
+    $view = Twig::fromRequest($request);
+    return $view->render($response, 'profile.html', [
+        'name' => $args['name']
+    ]);
+})->setName('profile');
+
+// Render from string
+$app->get('/hi/{name}', function ($request, $response, $args) {
+    $view = Twig::fromRequest($request);
+    $str = $view->fetchFromString(
+        '<p>Hi, my name is {{ name }}.</p>',
+        [
+            'name' => $args['name']
+        ]
+    );
+    $response->getBody()->write($str);
     return $response;
 });
 
