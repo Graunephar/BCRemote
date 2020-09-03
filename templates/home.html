@@ -1,1 +1,7 @@
-lol
+<h1>Members</h1>
+<ul>
+    {{json}}
+    {% for item in json %}
+    <li>{{ user.title.rendered|e }}</li>
+    {% endfor %}
+</ul>

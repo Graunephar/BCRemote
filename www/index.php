@@ -21,7 +21,8 @@ $app = AppFactory::create();
 $app->addRoutingMiddleware();
 
 // Create Twig
-$twig = Twig::create('templates', ['cache' => 'cache']);
+//Value for cache is false if off and $_ENV['CACHE_DIR'] (<-- Note ref to name of folder) if on
+$twig = Twig::create($_ENV['TEMPLATE_DIR'], ['cache' => false]);
 
 // Add Twig-View Middleware
 $app->add(TwigMiddleware::create($app, $twig));
@@ -62,7 +63,7 @@ $app->get('/', function (Request $request, Response $response, $args)  {
 
 
     return $view->render($response, 'home.html', [
-        'name' => $args['name']
+        'json' => $args['json']
     ]);
 
 });
