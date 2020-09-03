@@ -41,7 +41,7 @@ $app->add(TwigMiddleware::create($app, $twig));
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
 
-$app->get('/', function (Request $request, Response $response, $args)  {
+$app->get('/', function (Request $request, Response $response, $args) {
     $view = Twig::fromRequest($request);
 
     $client = new \GuzzleHttp\Client([
@@ -53,17 +53,21 @@ $app->get('/', function (Request $request, Response $response, $args)  {
 
     $getdata = $client->get("modules");
 
-        $connector = new DatabaseConnector();
+    $connector = new DatabaseConnector();
 
-        $body = $getdata->getBody();
+    $body = $getdata->getBody();
 
-        $json = json_decode($body);
+    $json = json_decode($body);
 
-        $connector->updateValue('wordpress/modules', $json);
+    $connector->updateValue('wordpress/modules', $json);
 
 
+   // print_r($json[2]->title->rendered);
+
+
+    // NAME vs VAlue
     return $view->render($response, 'home.html', [
-        'json' => $args['json']
+        'json' => $json
     ]);
 
 });

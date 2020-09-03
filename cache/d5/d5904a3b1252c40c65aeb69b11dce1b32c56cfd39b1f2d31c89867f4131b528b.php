@@ -32,13 +32,13 @@ class __TwigTemplate_4232f8855279ce59cf2838e72fd7fd9a60127f142fec83276374ee77bf3
     protected function doGetParent(array $context)
     {
         // line 1
-        return "layout.html";
+        return "base.html";
     }
 
     protected function doDisplay(array $context, array $blocks = [])
     {
         $macros = $this->macros;
-        $this->parent = $this->loadTemplate("layout.html", "profile.html", 1);
+        $this->parent = $this->loadTemplate("base.html", "profile.html", 1);
         $this->parent->display($context, array_merge($this->blocks, $blocks));
     }
 
