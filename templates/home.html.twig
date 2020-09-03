@@ -13,12 +13,18 @@
 {% endblock %}
 {% block content %}
 
+    <ul>
+    {% for item in checkboxes %}
+        <li>{{ item }}</li>
+    {% endfor %}
+    </ul>
+
     <div class="alert_placeholder"></div>
     <h1>Content</h1>
     <form id="idform" action="/submitids" method="POST">
         <ul>
             {% for item in json %}
-                <li><input type="checkbox" id="{{ item.id }}" name="{{ item.id }}" value="true"> {{ item.title.rendered|e }}
+                <li><input type="checkbox" id="{{ item.id }}" name="{{ item.id }}" value="{{ item.id }}"> {{ item.title.rendered|e }}
                 </li>
             {% endfor %}
         </ul>

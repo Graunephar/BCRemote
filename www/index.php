@@ -115,7 +115,7 @@ $app->post('/submitids', function (Request $request, Response $response, $args) 
     $data = array();
     foreach ($params as $key => $value) {
         $item = array();
-        $item[$key]  = $value ;
+        $item['id']  = $value ;
         $data[] = $item; //adds item to the next free space
     }
 
