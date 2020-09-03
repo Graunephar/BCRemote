@@ -1,55 +1,50 @@
 <?php
 
+
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
+
 
 require('database.php');
 require __DIR__ . '/../vendor/autoload.php';
-require 'vendor/autoload.php';
 
 
 define('WP_CONTENT_URL' , 'http://bcappdata.graunephar.lol');
 
 
-
 $app = AppFactory::create();
+
+$app->addRoutingMiddleware();
+
+/**
+ * Add Error Handling Middleware
+ *
+ * @param bool $displayErrorDetails -> Should be set to false in production
+ * @param bool $logErrors -> Parameter is passed to the default ErrorHandler
+ * @param bool $logErrorDetails -> Display error details in error log
+ * which can be replaced by a callable of your choice.
+
+ * Note: This middleware should be added last. It will not handle any exceptions/errors
+ * for middleware added after it.
+ */
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+
 
 $app->get('/', function (Request $request, Response $response, $args)  {
 
 
-    //$connector = new DatabaseConnector();
+    $client = new \GuzzleHttp\Client(["base_uri" => "http://bcappdata.graunephar.lol/wp-json/wp/v2/modules"]);
+    $response = $client->get("modules");
 
-    //$connector->updateValue('web/fest', 'Test');
+    echo $response->getBody();
 
-
-    $client = new Client([
-        // Base URI is used with relative requests
-        'base_uri' => WP_CONTENT_URL,
-        // You can set any number of default request options.
-        'timeout'  => 2.0,
-    ]);
-
-    $promise = $client->requestAsync('GET', '/wp-json/wp/v2/modules');
-
-    $promise->then(function ($response) {
-
-
-
-    });
-
+    //http://bcappdata.graunephar.lol/wp-json/wp/v2/modules
 
     $response->getBody()->write("Hello");
     return $response;
 });
 
-$app->get('/debug', function (Request $request, Response $response, $args) use ($app) {
-
-    var_dump($app->foo);
-
-});
 
 $app->run();
