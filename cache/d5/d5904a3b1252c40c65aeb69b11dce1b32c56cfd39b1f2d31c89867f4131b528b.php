@@ -12,7 +12,7 @@ use Twig\Sandbox\SecurityNotAllowedFunctionError;
 use Twig\Source;
 use Twig\Template;
 
-/* profile.html */
+/* profile.html.twig */
 class __TwigTemplate_4232f8855279ce59cf2838e72fd7fd9a60127f142fec83276374ee77bf321ca1 extends Template
 {
     private $source;
@@ -32,13 +32,13 @@ class __TwigTemplate_4232f8855279ce59cf2838e72fd7fd9a60127f142fec83276374ee77bf3
     protected function doGetParent(array $context)
     {
         // line 1
-        return "base.html";
+        return "base.html.twig";
     }
 
     protected function doDisplay(array $context, array $blocks = [])
     {
         $macros = $this->macros;
-        $this->parent = $this->loadTemplate("base.html", "profile.html", 1);
+        $this->parent = $this->loadTemplate("base.html.twig", "profile.html.twig", 1);
         $this->parent->display($context, array_merge($this->blocks, $blocks));
     }
 
@@ -67,7 +67,7 @@ class __TwigTemplate_4232f8855279ce59cf2838e72fd7fd9a60127f142fec83276374ee77bf3
 
     public function getTemplateName()
     {
-        return "profile.html";
+        return "profile.html.twig";
     }
 
     public function isTraitable()
@@ -82,6 +82,6 @@ class __TwigTemplate_4232f8855279ce59cf2838e72fd7fd9a60127f142fec83276374ee77bf3
 
     public function getSourceContext()
     {
-        return new Source("", "profile.html", "/home/daniel/Git/BitCraverControllerApp/templates/profile.html");
+        return new Source("", "profile.html.twig", "/home/daniel/Git/BitCraverControllerApp/templates/profile.html.twig");
     }
 }

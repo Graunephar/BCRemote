@@ -1,0 +1,44 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Index{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <style type="text/css">
+        .important {
+            color: #336699;
+        }
+    </style>
+
+
+{% endblock %}
+{% block content %}
+    <h1>Content</h1>
+    <ul>
+        {% for item in json %}
+            <li>{{ item.title.rendered|e }}</li>
+        {% endfor %}
+    </ul>
+
+    <button class="sendData" type="button">Click Me!</button>
+
+    <script>
+
+
+        // A $( document ).ready() block.
+        $(document).ready(function () {
+            console.log("ready!");
+
+
+            $('.sendData').on('click', function () {
+                console.log('hej');
+            });
+
+            $.post("ajax/test.html", function (data) {
+                $(".result").html(data);
+            });
+
+        });
+
+    </script>
+
+{% endblock %}

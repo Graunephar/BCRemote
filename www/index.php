@@ -1,17 +1,25 @@
 <?php
 
+//Make sure we also serve stativ files in developement! 
+if (PHP_SAPI == 'cli-server') {
+    $_SERVER['SCRIPT_NAME'] = basename(__FILE__);
+    $url  = parse_url($_SERVER['REQUEST_URI']);
+    $file = __DIR__ . $url['path'];
+    if (is_file($file)) {
+        return false;
+    }
+}
 
-use Google\Cloud\Core\Testing\Snippet\Container;
+
+require('database.php');
+require __DIR__ . '/../vendor/autoload.php';
+
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
-
-
-require('database.php');
-require __DIR__ . '/../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
@@ -26,6 +34,7 @@ $twig = Twig::create($_ENV['TEMPLATE_DIR'], ['cache' => false]);
 
 // Add Twig-View Middleware
 $app->add(TwigMiddleware::create($app, $twig));
+
 
 /**
  * Add Error Handling Middleware
@@ -66,8 +75,19 @@ $app->get('/', function (Request $request, Response $response, $args) {
 
 
     // NAME vs VAlue
-    return $view->render($response, 'home.html', [
+    return $view->render($response, 'home.html.twig', [
         'json' => $json
+    ]);
+
+});
+
+$app->get('/test', function (Request $request, Response $response, $args) {
+    $view = Twig::fromRequest($request);
+
+    //print_r(PHP_SAPI);
+    // NAME vs VAlue
+    return $view->render($response, 'home.html.twig', [
+
     ]);
 
 });
@@ -79,7 +99,7 @@ $app->get('/', function (Request $request, Response $response, $args) {
 // Define named route
 $app->get('/hello/{name}', function ($request, $response, $args) {
     $view = Twig::fromRequest($request);
-    return $view->render($response, 'profile.html', [
+    return $view->render($response, 'profile.html.twig', [
         'name' => $args['name']
     ]);
 })->setName('profile');
@@ -96,6 +116,7 @@ $app->get('/hi/{name}', function ($request, $response, $args) {
     $response->getBody()->write($str);
     return $response;
 });
+
 
 
 $app->run();
