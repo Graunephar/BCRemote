@@ -10,9 +10,8 @@ use Slim\Factory\AppFactory;
 require('database.php');
 require __DIR__ . '/../vendor/autoload.php';
 
-
-define('WP_CONTENT_URL' , 'http://bcappdata.graunephar.lol');
-
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
 
 $app = AppFactory::create();
 
@@ -35,18 +34,23 @@ $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 $app->get('/', function (Request $request, Response $response, $args)  {
 
 
-    $client = new \GuzzleHttp\Client(["base_uri" => "http://bcappdata.graunephar.lol/wp-json/wp/v2/modules"]);
+    $client = new \GuzzleHttp\Client([
+        "base_uri" => $_ENV['WORDPRESS'],
+        'debug' => false,
+        'timeout' => 10, // Response timeout
+        'connect_timeout' => 10, // Connection timeout
+    ]);
+
     $getdata = $client->get("modules");
 
-    $connector = new DatabaseConnector();
+        $connector = new DatabaseConnector();
 
-    $body = $getdata->getBody();
+        $body = $getdata->getBody();
 
-    $json = json_decode($body);
+        $json = json_decode($body);
 
-   $connector->updateValue('wordpress/modules', $json);
+        $connector->updateValue('wordpress/modules', $json);
 
-    //http://bcappdata.graunephar.lol/wp-json/wp/v2/modules
 
     $response->getBody()->write("hej");
     return $response;
