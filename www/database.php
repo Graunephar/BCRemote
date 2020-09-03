@@ -40,10 +40,7 @@ class DatabaseConnector {
 
 
     public function updateValue($key, $new_value) {
-
         $this->database->getReference($key)->set($new_value);
-
-
     }
 
     public function  COmplexExample() {

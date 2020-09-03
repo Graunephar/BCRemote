@@ -36,13 +36,19 @@ $app->get('/', function (Request $request, Response $response, $args)  {
 
 
     $client = new \GuzzleHttp\Client(["base_uri" => "http://bcappdata.graunephar.lol/wp-json/wp/v2/modules"]);
-    $response = $client->get("modules");
+    $getdata = $client->get("modules");
 
-    echo $response->getBody();
+    $connector = new DatabaseConnector();
+
+    $body = $getdata->getBody();
+
+    $json = json_decode($body);
+
+   $connector->updateValue('wordpress/modules', $json);
 
     //http://bcappdata.graunephar.lol/wp-json/wp/v2/modules
 
-    $response->getBody()->write("Hello");
+    $response->getBody()->write("hej");
     return $response;
 });
 
