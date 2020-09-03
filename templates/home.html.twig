@@ -35,7 +35,17 @@
 
             $('.sendData').on('click', function () {
                 console.log('Sending Data');
-                $('#idform').submit();
+                $.ajax({
+                    url:'/submitids',
+                    type:'post',
+                    data:$('#idform').serialize(),
+                    success:function(){
+
+                        addAlert('body', "App Opdateret");
+
+                    }
+                });
+
             });
 
             $('.updateList').on('click', function () {
@@ -46,7 +56,17 @@
                 });
             });
 
+
+
         });
+
+
+        function addAlert(css_selector, message) {
+
+            let html = '<div class="alert alert-success" role="alert">' + message + '</div>';
+
+            $(css_selector).prepend(html);
+        }
 
     </script>
 
