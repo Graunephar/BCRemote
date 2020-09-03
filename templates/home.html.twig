@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Index{% endblock %}
+{% block title %}Visningsoversigt{% endblock %}
 {% block head %}
     {{ parent() }}
     <style type="text/css">
@@ -15,26 +15,30 @@
     <h1>Content</h1>
     <ul>
         {% for item in json %}
-            <li>{{ item.title.rendered|e }}</li>
+            <li><input type="checkbox" id="{{ item.id }}" name="vehicle3" value="Vist"> {{ item.title.rendered|e }}
+            </li>
         {% endfor %}
     </ul>
 
     <button class="sendData" type="button">Click Me!</button>
+    <button class="updateList" type="button">Opdater Liste</button>
 
     <script>
 
 
         // A $( document ).ready() block.
         $(document).ready(function () {
-            console.log("ready!");
-
 
             $('.sendData').on('click', function () {
                 console.log('hej');
             });
 
-            $.post("ajax/test.html", function (data) {
-                $(".result").html(data);
+            $('.updateList').on('click', function () {
+                console.log("updating")
+                $.get( "/update", function( data ) {
+                    console.log("Sucess");
+                    location.reload(); // the baddest way to do this,, but sooooooo easy
+                });
             });
 
         });

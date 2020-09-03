@@ -26,6 +26,10 @@ class DatabaseConnector {
         $this->database = $factory->createDatabase();
     }
 
+    public function getDeepValue($key) {
+        return $this->database->getReference($key)->getValue();
+    }
+
 
     public function getValue($key) {
 

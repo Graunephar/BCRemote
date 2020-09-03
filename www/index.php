@@ -1,6 +1,6 @@
 <?php
 
-//Make sure we also serve stativ files in developement! 
+//Make sure we also serve stativ files in developement!
 if (PHP_SAPI == 'cli-server') {
     $_SERVER['SCRIPT_NAME'] = basename(__FILE__);
     $url  = parse_url($_SERVER['REQUEST_URI']);
@@ -9,7 +9,6 @@ if (PHP_SAPI == 'cli-server') {
         return false;
     }
 }
-
 
 require('database.php');
 require __DIR__ . '/../vendor/autoload.php';
@@ -22,6 +21,7 @@ use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+
 $dotenv->load();
 
 $app = AppFactory::create();
@@ -50,7 +50,21 @@ $app->add(TwigMiddleware::create($app, $twig));
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
 
+
 $app->get('/', function (Request $request, Response $response, $args) {
+    $view = Twig::fromRequest($request);
+
+    $connector = new DatabaseConnector();
+
+    $json = $connector->getDeepValue('wordpress/modules');
+
+    return $view->render($response, 'home.html.twig', [
+        'json' => $json
+    ]);
+
+});
+
+$app->get('/update', function (Request $request, Response $response, $args) {
     $view = Twig::fromRequest($request);
 
     $client = new \GuzzleHttp\Client([
@@ -71,13 +85,11 @@ $app->get('/', function (Request $request, Response $response, $args) {
     $connector->updateValue('wordpress/modules', $json);
 
 
-   // print_r($json[2]->title->rendered);
+    $result = array("success"=>true);
+    $status = json_encode($result );
+    $response->getBody()->write($status);
+    return $response;
 
-
-    // NAME vs VAlue
-    return $view->render($response, 'home.html.twig', [
-        'json' => $json
-    ]);
 
 });
 
