@@ -128,6 +128,34 @@ $app->post('/submitids', function (Request $request, Response $response, $args) 
     return $response;
 });
 
+$app->get('/appdata', function (Request $request, Response $response, $args) {
+
+    $connector = new DatabaseConnector();
+
+    $posts = $connector->getDeepValue('wordpress/modules');
+    $ids = $connector->getDeepValue('app/ids');
+
+    $results = array();
+    foreach($posts as $post) {
+        $post_id = $post['id'];
+
+        foreach ($ids as $label => $checkbox) {
+            $checkbox_id = $checkbox['id'];
+                if($post_id ==  $checkbox_id) {
+
+                    $results[] = $post;
+                }
+
+        }
+    }
+
+    $json = json_encode($results);
+
+
+    $response->getBody()->write($json);
+    return $response;
+});
+
 
 //$response->getBody()->write("hej");
 //return $response;
